@@ -1,0 +1,6 @@
+@AzIsdDapr.ServerApi_HostAddress = http://localhost:5280
+
+GET {{AzIsdDapr.ServerApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
