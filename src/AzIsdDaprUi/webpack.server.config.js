@@ -10,12 +10,13 @@ module.exports = {
     devtool: 'source-map',
 
     entry: {
-        styleClient: {import: './style.css', filename: 'AzIsdDapr.ClientApi/wwwroot/[name].js'}
+        app: "./app/serverApp.tsx",
+        style: "./styles/style.scss"
     },
 
     output: {
-        clean: false,
-        path: path.resolve(__dirname, "../AzIsdDapr"),
+        clean: true,
+        path: path.resolve(__dirname, "../AzIsdDapr/AzIsdDapr.ServerApi/wwwroot/"),
         filename: '[name]'.js
     },
 
@@ -47,10 +48,13 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "layouts/client", "index.html"),
-        }),
+            filename: "index.html",
+            template: path.resolve(__dirname, "layouts/server", "index.html"),
+        })
+        ,
         new MiniCssExtractPlugin({
             filename: "./styles/style.scss",
+
         })
     ],
 };

@@ -6,6 +6,9 @@
 # Node specific folders
 node_modules/
 
+# VS wwwroot folder
+wwwroot/
+
 # User-specific files
 *.rsuser
 *.suo
