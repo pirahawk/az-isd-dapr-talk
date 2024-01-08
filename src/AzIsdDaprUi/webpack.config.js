@@ -10,14 +10,12 @@ module.exports = {
     devtool: 'source-map',
 
     entry: {
-        app: "./src/hello.tsx",
-        socketapp: "./src/mysocket.tsx",
-        style: "./styles/style.scss"
+        styleClient: {import: './style.css', filename: 'AzIsdDapr.ClientApi/wwwroot/[name].js'}
     },
 
     output: {
-        clean: true,
-        path: path.resolve(__dirname, "../BlazorApp1/wwwroot"),
+        clean: false,
+        path: path.resolve(__dirname, "../AzIsdDapr"),
         filename: '[name]'.js
     },
 
@@ -49,33 +47,10 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "layout", "index.html"),
+            template: path.resolve(__dirname, "layouts/client", "index.html"),
         }),
         new MiniCssExtractPlugin({
             filename: "./styles/style.scss",
-        }),
-        // I am not sure if this was needed to support the `devtool: 'source-map',` option above
-        // new WebPack.LoaderOptionsPlugin({
-        //     debug: true
-        // })
+        })
     ],
-
-    //This is config for the dev server
-    // https://webpack.js.org/configuration/dev-server/#devserver
-    devServer:{
-        static: {
-            directory: path.join(__dirname, 'public'),
-          },
-
-          compress: true,
-          port: 9000,
-          hot: false,
-
-          headers: () => {
-            return { 
-                'X-Bar': ['key1=value1', 'key2=value2'] ,
-                'x-mycustom': 'foobar'
-            };
-          },
-    }
 };
