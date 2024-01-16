@@ -6,10 +6,15 @@ jobs:
     name: Publish Client API Docker Image
     # if:  github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+
     steps:
 
     - name: checkout-repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         clean: 'true'
 
@@ -34,10 +39,15 @@ jobs:
     name: Publish Server API Docker Image
     # if:  github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+
     steps:
 
     - name: checkout-repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         clean: 'true'
 
