@@ -1,0 +1,59 @@
+name: Build-Publish-Docker-Images
+on: [push]
+
+jobs:
+  build_client_api:
+    name: Publish Client API Docker Image
+    if:  github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: checkout-repo
+      uses: actions/checkout@v2
+      with:
+        clean: 'true'
+
+    - name: docker-login
+      uses: docker/login-action@v1
+      with:
+        registry: docker.pkg.github.com
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: docker-build-push-clientapi
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        context: ./src
+        file: ./build/client.dockerfile
+        tags: | 
+          docker.pkg.github.com/${{ github.repository }}/azisddaprclient:${{github.run_number}}
+          docker.pkg.github.com/${{ github.repository }}/azisddaprclient:latest
+
+  build_server_api:
+    name: Publish Server API Docker Image
+    if:  github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: checkout-repo
+      uses: actions/checkout@v2
+      with:
+        clean: 'true'
+
+    - name: docker-login
+      uses: docker/login-action@v1
+      with:
+        registry: docker.pkg.github.com
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: docker-build-push-clientapi
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        context: ./src
+        file: ./build/server.dockerfile
+        tags: | 
+          docker.pkg.github.com/${{ github.repository }}/azisddaprserver:${{github.run_number}}
+          docker.pkg.github.com/${{ github.repository }}/azisddaprserver:latest
