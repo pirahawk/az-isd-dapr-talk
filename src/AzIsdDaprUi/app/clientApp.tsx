@@ -13,7 +13,7 @@ function Hello(){
     const [weather, setWeather] = React.useState<Forecast[]>([]);
 
     React.useEffect(()=>{
-        //populateWeatherData();
+        populateWeatherData();
     }, []);
 
     const weatherList = weather.map((forcast, index, arr) =>{
