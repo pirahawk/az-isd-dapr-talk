@@ -4,7 +4,7 @@ on: [push]
 jobs:
   build_client_api:
     name: Publish Client API Docker Image
-    if:  github.event_name == 'push' && github.ref == 'refs/heads/master'
+    # if:  github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
 
