@@ -9,26 +9,26 @@ jobs:
     steps:
 
     - name: checkout-repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         clean: 'true'
 
     - name: docker-login
-      uses: docker/login-action@v1
+      uses: docker/login-action@v3
       with:
-        registry: docker.pkg.github.com
+        registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: docker-build-push-clientapi
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v5
       with:
         push: true
         context: ./src
         file: ./build/client.dockerfile
         tags: | 
-          docker.pkg.github.com/${{ github.repository }}/azisddaprclient:${{github.run_number}}
-          docker.pkg.github.com/${{ github.repository }}/azisddaprclient:latest
+          ghcr.io/${{ github.repository }}/azisddaprclient:${{github.run_number}}
+          ghcr.io/${{ github.repository }}/azisddaprclient:latest
 
   build_server_api:
     name: Publish Server API Docker Image
@@ -37,23 +37,23 @@ jobs:
     steps:
 
     - name: checkout-repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         clean: 'true'
 
     - name: docker-login
-      uses: docker/login-action@v1
+      uses: docker/login-action@v3
       with:
-        registry: docker.pkg.github.com
+        registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: docker-build-push-clientapi
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v5
       with:
         push: true
         context: ./src
         file: ./build/server.dockerfile
         tags: | 
-          docker.pkg.github.com/${{ github.repository }}/azisddaprserver:${{github.run_number}}
-          docker.pkg.github.com/${{ github.repository }}/azisddaprserver:latest
+          ghcr.io/${{ github.repository }}/azisddaprserver:${{github.run_number}}
+          ghcr.io/${{ github.repository }}/azisddaprserver:latest
