@@ -18,7 +18,7 @@ namespace AzIsdDapr.ServerApi.Controllers
         }
 
         [HttpPost(Name = "Send")]
-        [Topic("orderpubsub", "orders")]
+        [Topic("messagingpubsub", "messagepubtopic")]
         public async Task<IActionResult> RecieveMessageFromTopic([FromBody] string message)
         {
             _logger.LogInformation($"Recieved Message: {message}");
