@@ -19,7 +19,18 @@ if($null -eq $(az group show -n $azGroupName)){
     Write-Output "Group $azGroupName exists. Deploying: $azDeploymentName"
 }
 
- az deployment group create -g $azGroupName -n $azDeploymentName -f $PSScriptRoot\bicep\deployAppDependencies.bicep `
+$dependenciesDeploymentName = "$azDeploymentName-dependencies"
+$appDeploymentName = "$azDeploymentName-app"
+
+Write-Output "Executing deployment $dependenciesDeploymentName"
+ 
+az deployment group create -g $azGroupName -n $dependenciesDeploymentName -f $PSScriptRoot\bicep\deployAppDependencies.bicep `
  --parameters `
  randomSuffix="$randomizationGuid" `
  userPrincipalId="$userAdId"
+
+ Write-Output "Executing deployment $appDeploymentName"
+
+ az deployment group create -g $azGroupName -n $appDeploymentName -f $PSScriptRoot\bicep\deployContainerApp.bicep `
+ --parameters `
+ randomSuffix="$randomizationGuid"
