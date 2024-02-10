@@ -106,7 +106,7 @@ resource daprComponentActorState 'Microsoft.App/managedEnvironments/daprComponen
 
 resource daprComponentPubsub 'Microsoft.App/managedEnvironments/daprComponents@2022-06-01-preview' = {
   parent: containerAppEnvironment
-  name: 'orderpubsub'
+  name: 'messagingpubsub'
   properties: {
     componentType: 'pubsub.azure.servicebus'
     version: 'v1'
@@ -121,7 +121,7 @@ resource daprComponentPubsub 'Microsoft.App/managedEnvironments/daprComponents@2
       }
       {
         name: 'consumerID'
-        value: 'orders' // Set to the same value of the subscription seen in ./servicebus.bicep
+        value: 'defaultmessagesub' // Set to the same value of the Topic "Subscription" that is expected otherwise will create its own subscriptions
       }
     ]
     scopes: [
@@ -311,7 +311,7 @@ resource daprActorClientApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
             }
             {
               name: 'Dapr__PubSub__Topic'
-              value: 'orders'
+              value: 'messagepubtopic'
             }
           ]
           probes:[

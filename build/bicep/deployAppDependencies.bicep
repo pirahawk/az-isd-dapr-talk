@@ -120,6 +120,24 @@ resource servicebusNameSpace 'Microsoft.ServiceBus/namespaces@2022-10-01-preview
     }
 
   }
+
+  resource messagepubtopic 'topics@2022-10-01-preview' = {
+    name: 'messagepubtopic'
+    properties:{
+      requiresDuplicateDetection:false
+      defaultMessageTimeToLive: 'PT10M'
+    }
+
+    resource subscription 'subscriptions' = {
+      name: 'defaultmessagesub'
+      properties: {
+        deadLetteringOnFilterEvaluationExceptions: true
+        deadLetteringOnMessageExpiration: true
+        maxDeliveryCount: 10
+      }
+    }
+
+  }
 }
 
 resource AcrPullRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
