@@ -5,6 +5,7 @@ builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
+builder.Services.AddHealthChecks();
 builder.Services
     .AddControllers()
     .AddDapr();
