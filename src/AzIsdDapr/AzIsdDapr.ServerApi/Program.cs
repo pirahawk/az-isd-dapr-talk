@@ -34,4 +34,8 @@ app.UseRouting();
 app.MapControllers();
 app.MapHealthChecks("/health");
 
+// Dapr configuration
+app.UseCloudEvents();
+app.MapSubscribeHandler();
+
 app.Run();

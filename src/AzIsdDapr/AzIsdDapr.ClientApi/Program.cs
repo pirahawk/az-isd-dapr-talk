@@ -1,3 +1,4 @@
+using AzIsdDapr.ClientApi.Config;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,8 @@ builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
+builder.Services.AddOptions<PubSubOptions>().BindConfiguration("Dapr:PubSub");
+
 builder.Services.AddHealthChecks();
 builder.Services
     .AddControllers()

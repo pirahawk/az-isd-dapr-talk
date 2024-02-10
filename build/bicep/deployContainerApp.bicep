@@ -305,6 +305,14 @@ resource daprActorClientApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
               name: 'Dapr__ApiSidecarScheme'
               value: 'http'
             }
+            {
+              name: 'Dapr__PubSub__Name'
+              value: daprComponentPubsub.name
+            }
+            {
+              name: 'Dapr__PubSub__Topic'
+              value: 'orders'
+            }
           ]
           probes:[
             {

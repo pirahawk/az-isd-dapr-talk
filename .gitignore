@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# folder exclusions
+local-az-dapr-components
+
 # deploy files
 deployapp.ps1
 
