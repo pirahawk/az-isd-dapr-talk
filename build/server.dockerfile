@@ -13,13 +13,12 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /srcbuild
-COPY --from=nodebase /src/AzIsdDapr/AzIsdDapr.ServerApi .
-RUN dotnet restore "AzIsdDapr.ServerApi.csproj"
-RUN dotnet build "AzIsdDapr.ServerApi.csproj" -c Release -o /app/build
-
+COPY --from=nodebase /src/AzIsdDapr .
+RUN dotnet restore "./AzIsdDapr.sln"
+RUN dotnet build "./AzIsdDapr.ServerApi/AzIsdDapr.ServerApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "AzIsdDapr.ServerApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./AzIsdDapr.ServerApi/AzIsdDapr.ServerApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 
 FROM base AS final

@@ -7,7 +7,7 @@ docker run --rm -d -p 7285:443 -p 5285:80 -e ASPNETCORE_URLS="http://+" azisddap
 
 docker build -t azisddaprserver:latest -f .\build\server.dockerfile .\src
 
-docker run --rm -d -p 7286:443 -p 5286:80 -e ASPNETCORE_URLS="http://+" azisddaprserver:latest -n myazisddaprclient
+docker run --rm -d -p 7286:443 -p 5286:80 -e ASPNETCORE_URLS="http://+" azisddaprserver:latest -n myazisddaprserver
 
 ```
 
