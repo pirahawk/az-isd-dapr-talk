@@ -14,8 +14,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /srcbuild
 COPY --from=nodebase /src/AzIsdDapr .
-# RUN dotnet restore "./AzIsdDapr.Common/AzIsdDapr.Common.csproj"
-# RUN dotnet restore "./AzIsdDapr.ClientApi/AzIsdDapr.ClientApi.csproj"
 RUN dotnet restore "./AzIsdDapr.sln"
 RUN dotnet build "./AzIsdDapr.ClientApi/AzIsdDapr.ClientApi.csproj" -c Release -o /app/build
 
