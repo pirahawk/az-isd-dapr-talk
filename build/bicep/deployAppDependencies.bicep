@@ -103,24 +103,6 @@ resource servicebusNameSpace 'Microsoft.ServiceBus/namespaces@2022-10-01-preview
     zoneRedundant: false
   }
 
-  resource ordersTopic 'topics@2022-10-01-preview' = {
-    name: 'orders'
-    properties:{
-      requiresDuplicateDetection:false
-      defaultMessageTimeToLive: 'PT10M'
-    }
-
-    resource subscription 'subscriptions' = {
-      name: 'orders'
-      properties: {
-        deadLetteringOnFilterEvaluationExceptions: true
-        deadLetteringOnMessageExpiration: true
-        maxDeliveryCount: 10
-      }
-    }
-
-  }
-
   resource messagepubtopic 'topics@2022-10-01-preview' = {
     name: 'messagepubtopic'
     properties:{
