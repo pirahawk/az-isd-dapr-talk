@@ -1,4 +1,4 @@
-﻿using AzIsdDapr.ClientApi.Config;
+﻿using AzIsdDapr.Common.Config;
 using Dapr.Client;
 using Microsoft;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +35,7 @@ namespace AzIsdDapr.ClientApi.Controllers
 
             var options = this.daprPubSubOptions.Value;
             
-            await this.daprClient.PublishEventAsync(options.Name, options.Topic, message);
+            await this.daprClient.PublishEventAsync(options.Name, options.Topic, message).ConfigureAwait(false); ;
 
             return await Task.FromResult(Ok());
         }
