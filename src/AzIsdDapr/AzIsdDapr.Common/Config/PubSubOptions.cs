@@ -1,4 +1,4 @@
-﻿namespace AzIsdDapr.ClientApi.Config
+﻿namespace AzIsdDapr.Common.Config
 {
     public record PubSubOptions
     {

@@ -1,4 +1,5 @@
-using AzIsdDapr.ClientApi.Config;
+using AzIsdDapr.Common.Config;
+using AzIsdDapr.Common.Signalr.Hubs;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddHealthChecks();
 builder.Services
     .AddControllers()
     .AddDapr();
+
+builder.Services.AddSignalR();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -35,5 +38,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
 app.MapHealthChecks("/health");
+
+// signalr hub map
+app.MapHub<MessageChatHub>("/hub/chat");
 
 app.Run();
