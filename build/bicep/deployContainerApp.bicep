@@ -21,6 +21,13 @@ resource servicebusNameSpace 'Microsoft.ServiceBus/namespaces@2022-10-01-preview
   name: 'servicebusns${randomSuffix}'
 }
 
+resource clientSignalrService 'Microsoft.SignalRService/signalR@2023-08-01-preview' existing = {
+  name: 'clientsignalr${randomSuffix}'
+}
+
+resource serverSignalrService 'Microsoft.SignalRService/signalR@2023-08-01-preview' existing = {
+  name: 'serversignalr${randomSuffix}'
+}
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: 'logs${randomSuffix}'
@@ -206,6 +213,10 @@ resource daprActorServerApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
               name: 'ApiOptions__ItemName'
               value: 'AppServiceItem'
             }
+            {
+              name: 'Azure__SignalR__ConnectionString'
+              value: serverSignalrService.listKeys().primaryConnectionString
+            }
           ]
           probes:[
             {
@@ -225,7 +236,6 @@ resource daprActorServerApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
     }
   }
 }
-
 
 resource daprActorClientApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
   name: 'dapractorclient${randomSuffix}'
@@ -312,6 +322,10 @@ resource daprActorClientApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
             {
               name: 'Dapr__PubSub__Topic'
               value: 'messagepubtopic'
+            }
+            {
+              name: 'Azure__SignalR__ConnectionString'
+              value: clientSignalrService.listKeys().primaryConnectionString
             }
           ]
           probes:[

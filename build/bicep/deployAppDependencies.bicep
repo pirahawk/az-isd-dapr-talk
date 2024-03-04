@@ -122,6 +122,97 @@ resource servicebusNameSpace 'Microsoft.ServiceBus/namespaces@2022-10-01-preview
   }
 }
 
+resource clientSignalrService 'Microsoft.SignalRService/signalR@2023-08-01-preview' = {
+  name: 'clientsignalr${randomSuffix}'
+  location: targetLocation
+  sku: {
+    name: 'Premium_P1'
+    tier: 'Premium'
+    capacity: 1
+  }
+  properties:{
+    cors: {
+      allowedOrigins: [
+        '*'
+      ]
+    }
+    networkACLs:{
+      defaultAction: 'Deny'
+      publicNetwork: {
+        allow: [
+          'ServerConnection'
+          'ClientConnection'
+          'RESTAPI'
+          'Trace'
+        ]
+      }
+      ipRules: [
+        {
+          value: '0.0.0.0/0'
+          action: 'Allow'
+        }
+        {
+          value: '::/0'
+          action: 'Allow'
+        }
+      ]
+      privateEndpoints: [
+        
+      ]
+    }
+    publicNetworkAccess: 'Enabled'
+    disableLocalAuth: false
+    disableAadAuth: false
+    regionEndpointEnabled: 'Enabled'
+  }
+}
+
+resource serverSignalrService 'Microsoft.SignalRService/signalR@2023-08-01-preview' = {
+  name: 'serversignalr${randomSuffix}'
+  location: targetLocation
+  sku: {
+    name: 'Premium_P1'
+    tier: 'Premium'
+    capacity: 1
+  }
+  properties:{
+    cors: {
+      allowedOrigins: [
+        '*'
+      ]
+    }
+    networkACLs:{
+      defaultAction: 'Deny'
+      publicNetwork: {
+        allow: [
+          'ServerConnection'
+          'ClientConnection'
+          'RESTAPI'
+          'Trace'
+        ]
+      }
+      ipRules: [
+        {
+          value: '0.0.0.0/0'
+          action: 'Allow'
+        }
+        {
+          value: '::/0'
+          action: 'Allow'
+        }
+      ]
+      privateEndpoints: [
+        
+      ]
+    }
+    publicNetworkAccess: 'Enabled'
+    disableLocalAuth: false
+    disableAadAuth: false
+    regionEndpointEnabled: 'Enabled'
+  }
+}
+
+
 resource AcrPullRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
   name: '7f951dda-4ed3-4680-a7ca-43fe172d538d'
 }
@@ -214,5 +305,31 @@ resource sbReceiverContainerAppService 'Microsoft.Authorization/roleAssignments@
     roleDefinitionId: ServiceBusReceiverRole.id
     principalType: 'ServicePrincipal'
     description: 'ServiceBusReceiverRole'
+  }
+}
+
+resource SignalRServiceOwnerRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+  name: '7e4f1700-ea5a-4f59-8f37-079cfe29dce3'
+}
+
+resource clientSignalRServiceOwner 'Microsoft.Authorization/roleAssignments@2022-04-01' ={
+  name: guid(clientSignalrService.id, containerManagedIdentity.name, SignalRServiceOwnerRole.name)
+  scope: clientSignalrService
+  properties:{
+    principalId: containerManagedIdentity.properties.principalId
+    roleDefinitionId: SignalRServiceOwnerRole.id
+    principalType: 'ServicePrincipal'
+    description: 'SignalRServiceOwnerRole'
+  }
+}
+
+resource serverSignalrServiceOwner 'Microsoft.Authorization/roleAssignments@2022-04-01' ={
+  name: guid(serverSignalrService.id, containerManagedIdentity.name, SignalRServiceOwnerRole.name)
+  scope: serverSignalrService
+  properties:{
+    principalId: containerManagedIdentity.properties.principalId
+    roleDefinitionId: SignalRServiceOwnerRole.id
+    principalType: 'ServicePrincipal'
+    description: 'SignalRServiceOwnerRole'
   }
 }
