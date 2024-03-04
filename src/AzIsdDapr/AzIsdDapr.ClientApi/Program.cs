@@ -1,5 +1,6 @@
 using AzIsdDapr.Common.Config;
 using AzIsdDapr.Common.Signalr.Hubs;
+using Microsoft.Extensions.Configuration;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +12,17 @@ builder.Services.AddOptions<PubSubOptions>().BindConfiguration("Dapr:PubSub");
 
 builder.Services.AddHealthChecks();
 builder.Services
-    .AddControllers()
-    .AddDapr();
+.AddControllers()
+.AddDapr();
 
-builder.Services.AddSignalR();
+if (!string.IsNullOrWhiteSpace(builder.Configuration.GetValue<string?>("Azure:SignalR:ConnectionString")))
+{
+    builder.Services.AddSignalR().AddAzureSignalR();
+}
+else
+{
+    builder.Services.AddSignalR();
+}
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

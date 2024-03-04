@@ -12,7 +12,14 @@ builder.Services
     .AddControllers()
     .AddDapr();
 
-builder.Services.AddSignalR();
+if (!string.IsNullOrWhiteSpace(builder.Configuration.GetValue<string?>("Azure:SignalR:ConnectionString")))
+{
+    builder.Services.AddSignalR().AddAzureSignalR();
+}
+else
+{
+    builder.Services.AddSignalR();
+}
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
