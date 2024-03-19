@@ -1,3 +1,4 @@
+using AzIsdDapr.Common.Dapr.Actors;
 using AzIsdDapr.Common.Signalr.Hubs;
 using System.Reflection;
 
@@ -12,6 +13,13 @@ builder.Services
     .AddControllers()
     .AddDapr();
 
+// Register Dapr Actors
+builder.Services.AddActors(services =>
+{
+    services.Actors.RegisterActor<BankAccountActor>();
+});
+
+// Add Signalr
 if (!string.IsNullOrWhiteSpace(builder.Configuration.GetValue<string?>("Azure:SignalR:ConnectionString")))
 {
     builder.Services.AddSignalR().AddAzureSignalR();
@@ -47,6 +55,7 @@ app.MapHealthChecks("/health");
 // Dapr configuration
 app.UseCloudEvents();
 app.MapSubscribeHandler();
+app.MapActorsHandlers();
 
 // signalr hub map
 app.MapHub<MessageChatHub>("/hub/chat");
