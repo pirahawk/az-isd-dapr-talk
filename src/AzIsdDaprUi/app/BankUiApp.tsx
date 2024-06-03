@@ -2,7 +2,7 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { useEffect, useRef, useState } from "react";
 import { HubConnectionState } from "@microsoft/signalr";
-import { DaprBankUIClientSocketConnection } from "./DaprBankUIClientSocketConnection";
+import { BankAccountState, DaprBankUIClientSocketConnection } from "./DaprBankUIClientSocketConnection";
 
 export interface BankUiAppInput {
     clientSocketConnection: DaprBankUIClientSocketConnection
@@ -10,7 +10,7 @@ export interface BankUiAppInput {
 
 export function BankUiApp({ clientSocketConnection }: BankUiAppInput) {
     const [connectionStatus, setConnectionStatus] = useState(clientSocketConnection.connectionStatus);
-    const [messages, setMessages] = useState<string[]>([]);
+    const [bankAccount, setBankAccount] = useState<BankAccountState>();
 
     const userNameRef = useRef(null);
     const messageInputRef = useRef(null);
@@ -20,15 +20,22 @@ export function BankUiApp({ clientSocketConnection }: BankUiAppInput) {
             setConnectionStatus(connectionStatus);
         });
 
-        clientSocketConnection.onNotifyBankAccountUpdatedSubject.subscribe((message) => {
-            let allMessages = [...messages, message];
-            setMessages(allMessages);
+        clientSocketConnection.onNotifyBankAccountUpdatedSubject.subscribe((bankAccountState) => {
+            setBankAccount(bankAccountState);
         })
     });
 
-    const messageList = messages.map((message, index, arr) => {
-        return (<li key={index}>{message}</li>);
-    });
+    const transactionList = bankAccount && bankAccount.transactions?
+    
+    bankAccount.transactions.map((transaction, index, arr) => {
+        return (<li key={transaction.id}>
+            <span>{transaction.amount}</span>|
+            <span>{transaction.transactionState}</span>|
+            <span>{transaction.createdUtc}</span>|
+            <span>{transaction.processedUtc}</span>|
+            </li>);
+    })
+    : null;
 
     return (
         <div>
@@ -37,9 +44,19 @@ export function BankUiApp({ clientSocketConnection }: BankUiAppInput) {
             </div>
 
             <div className="message-list">
-                <ul>
-                    {messageList}
-                </ul>
+                
+                {bankAccount? (
+                    <div>
+                        <p><label htmlFor="">Balance</label><span>{bankAccount.balance}</span></p>
+                        <p>Transactions:</p>
+                        <ul>
+                            {transactionList}
+                        </ul>
+                     </div>
+                ): (
+                    <p>Awaiting Account information</p>
+                )}
+
             </div>
         </div>
 

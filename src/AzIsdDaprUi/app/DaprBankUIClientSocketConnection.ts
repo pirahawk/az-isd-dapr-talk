@@ -5,11 +5,11 @@ import { Subject } from "rxjs";
 
 export class DaprBankUIClientSocketConnection {
     public onConnectedStatusChangedSubject: Subject<HubConnectionState>;
-    public onNotifyBankAccountUpdatedSubject: Subject<string>;
+    public onNotifyBankAccountUpdatedSubject: Subject<BankAccountState>;
 
     constructor(private connection: signalR.HubConnection) {
         this.onConnectedStatusChangedSubject = new Subject<HubConnectionState>();
-        this.onNotifyBankAccountUpdatedSubject = new Subject<string>();
+        this.onNotifyBankAccountUpdatedSubject = new Subject<BankAccountState>();
         this.bindConnection();
     }
 
@@ -58,9 +58,22 @@ export class DaprBankUIClientSocketConnection {
             this.updateConnectionStatus();
         });
 
-        this.connection.on("BankAccountUpdated", (message: string) => {
+        this.connection.on("BankAccountUpdated", (message: BankAccountState) => {
             console.log(`Signalr: "NotifyBankAccountUpdated": ${message}`);
             this.onNotifyBankAccountUpdatedSubject.next(message);
         });
     }
+}
+
+export interface BankAccountState{
+    balance: number
+    transactions: BankAccountTransaction[]
+}
+
+export interface BankAccountTransaction{
+    id:string
+    amount:number
+    createdUtc: string
+    processedUtc?: string
+    transactionState: string
 }

@@ -59,7 +59,7 @@ namespace AzIsdDapr.Common.Dapr.Actors
 
         private async Task NotifyBankAccountUpdated()
         {
-            await this.hubContext.Clients.All.BankAccountUpdated($"{DateTimeOffset.UtcNow} - Bank account updated.");
+            await this.hubContext.Clients.All.BankAccountUpdated(this.accountState);
         }
 
         private async Task RegisterTransactionTimerAsync()

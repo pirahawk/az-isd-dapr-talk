@@ -13,7 +13,8 @@ namespace AzIsdDapr.Common.Signalr.Hubs
 
         public async Task NotifyBankAccountUpdated()
         {
-            await this.Clients.All.BankAccountUpdated($"{DateTimeOffset.UtcNow} - Bank account updated.");
+            await Task.CompletedTask;
+            //await this.Clients.All.BankAccountUpdated($"{DateTimeOffset.UtcNow} - Bank account updated.");
         }
     }
 }
