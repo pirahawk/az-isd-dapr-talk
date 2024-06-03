@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft;
 using Dapr.Actors;
 using System.Transactions;
+using AzIsdDapr.Common.Signalr.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace AzIsdDapr.Common.Dapr.Actors
 {
@@ -13,10 +15,15 @@ namespace AzIsdDapr.Common.Dapr.Actors
 
         private readonly ILogger<BankAccountActor> logger;
         private AccountState? accountState;
+        private readonly IHubContext<BankUIHub, IDaprBankUiListener> hubContext;
 
-        public BankAccountActor(ActorHost host, ILogger<BankAccountActor> logger) : base(host)
+        public BankAccountActor(
+            ActorHost host,
+            ILogger<BankAccountActor> logger,
+            IHubContext<BankUIHub, IDaprBankUiListener> hubContext) : base(host)
         {
             this.logger = logger;
+            this.hubContext = hubContext;
         }
 
         public async Task AddTransaction(decimal depositAmount)
@@ -39,7 +46,7 @@ namespace AzIsdDapr.Common.Dapr.Actors
             accountState.Transactions.Add(transaction);
             await this.SaveAccountState();
         }
-        
+
         private async Task<AccountState> GetAccountState() => await this.StateManager.GetStateAsync<AccountState>(ACCOUNT_STATE);
 
         private async Task SaveAccountState()
@@ -47,6 +54,12 @@ namespace AzIsdDapr.Common.Dapr.Actors
             Assumes.NotNull(accountState);
             await this.StateManager.SetStateAsync<AccountState>(ACCOUNT_STATE, accountState);
             this.logger.LogInformation($"{this.LogPrefix}- Successfully persisted {ACCOUNT_STATE}.");
+            await this.NotifyBankAccountUpdated();
+        }
+
+        private async Task NotifyBankAccountUpdated()
+        {
+            await this.hubContext.Clients.All.BankAccountUpdated($"{DateTimeOffset.UtcNow} - Bank account updated.");
         }
 
         private async Task RegisterTransactionTimerAsync()
@@ -112,7 +125,7 @@ namespace AzIsdDapr.Common.Dapr.Actors
         }
     }
 
-    public interface IBankAccount: IActor
+    public interface IBankAccount : IActor
     {
         Task AddTransaction(decimal depositAmount);
     }

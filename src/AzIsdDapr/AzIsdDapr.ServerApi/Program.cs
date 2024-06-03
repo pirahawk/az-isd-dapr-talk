@@ -59,5 +59,6 @@ app.MapActorsHandlers();
 
 // signalr hub map
 app.MapHub<MessageChatHub>("/hub/chat");
+app.MapHub<BankUIHub>("/hub/bankui");
 
 app.Run();
