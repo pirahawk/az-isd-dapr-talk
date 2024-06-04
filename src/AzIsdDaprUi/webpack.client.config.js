@@ -52,6 +52,11 @@ module.exports = {
             template: path.resolve(__dirname, "layouts/client", "index.html"),
         })
         ,
+        new HtmlWebpackPlugin({
+            filename: "bank.html",
+            template: path.resolve(__dirname, "layouts/client", "bank.html"),
+        })
+        ,
         new MiniCssExtractPlugin({
             filename: "./styles/style.scss",
 
