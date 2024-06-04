@@ -37,9 +37,3 @@ export function Hello(){
     }
 }
 
-// let helloElement = document.getElementById("hello-test");
-
-// if(helloElement){
-//     const root = createRoot(helloElement);
-//     root.render(<Hello />);
-// }

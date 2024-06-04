@@ -34,16 +34,5 @@ namespace AzIsdDapr.ClientApi.Controllers
             })
             .ToArray();
         }
-
-        [HttpGet("DoTest", Name = "DoTest")]
-        public async Task<IActionResult> TestActorInvoke()
-        {
-            var actorType = nameof(BankAccountActor);
-            var actorId = new ActorId($"BA123");
-            var proxy = this.actorProxyFactory.CreateActorProxy<IBankAccount>(actorId, actorType);
-            await proxy.AddTransaction(123m);
-
-            return Ok();
-        }
     }
 }

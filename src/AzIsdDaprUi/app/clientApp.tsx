@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { ChatApp } from "./chatApp";
 import { SignalRSocketFactory } from "./signalrSocketFactory";
 import { DaprChatClientSocketConnection } from "./DaprChatClientSocketConnection";
+import { BankClientApp } from "./BankClientApp";
 
 let chatApp = document.getElementById("chat-app");
 const clientMessageChatHubUrl = '/hub/chat';
@@ -18,3 +19,9 @@ if(chatApp){
     }, 500);
 }
 
+let bankClientApp = document.getElementById("bank-ui");
+
+if(bankClientApp){
+    const root = createRoot(bankClientApp);
+    root.render(<BankClientApp/>);
+}
