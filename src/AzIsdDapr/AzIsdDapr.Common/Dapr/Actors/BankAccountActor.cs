@@ -1,7 +1,6 @@
 ﻿using Dapr.Actors.Runtime;
 using Microsoft.Extensions.Logging;
 using Microsoft;
-using Dapr.Actors;
 using System.Transactions;
 using AzIsdDapr.Common.Signalr.Hubs;
 using Microsoft.AspNetCore.SignalR;
@@ -26,7 +25,12 @@ namespace AzIsdDapr.Common.Dapr.Actors
             this.hubContext = hubContext;
         }
 
-        public async Task AddTransaction(decimal depositAmount)
+        public async Task StartBankAccountAsync(){
+            this.logger.LogInformation($"{this.LogPrefix} - Started Bank Account Actor");
+            await this.NotifyBankAccountUpdated();
+        }
+
+        public async Task AddTransactionAsync(decimal depositAmount)
         {
             if (accountState == null)
             {
@@ -59,6 +63,10 @@ namespace AzIsdDapr.Common.Dapr.Actors
 
         private async Task NotifyBankAccountUpdated()
         {
+            if(this.accountState == null ){
+                return;
+            }
+
             await this.hubContext.Clients.All.BankAccountUpdated(this.accountState);
         }
 
@@ -123,37 +131,5 @@ namespace AzIsdDapr.Common.Dapr.Actors
             this.logger.LogInformation($"{this.LogPrefix}- Deactivating Actor.");
             return base.OnDeactivateAsync();
         }
-    }
-
-    public interface IBankAccount : IActor
-    {
-        Task AddTransaction(decimal depositAmount);
-    }
-
-    public record AccountState
-    {
-        public AccountState()
-        {
-            Transactions = Enumerable.Empty<Transaction>().ToList();
-        }
-
-        public decimal Balance { get; set; }
-        public List<Transaction> Transactions { get; set; }
-    }
-
-    public record Transaction
-    {
-        public string Id { get; set; } = string.Empty;
-        public decimal Amount { get; set; }
-        public DateTimeOffset CreatedUtc { get; set; }
-        public DateTimeOffset? ProcessedUtc { get; set; }
-        public TransactionState TransactionState { get; set; }
-    }
-
-    public enum TransactionState
-    {
-        Processing = 1,
-        Cleared = 2,
-        Failed = 3
     }
 }
