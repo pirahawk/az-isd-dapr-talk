@@ -9,6 +9,9 @@ local-az-dapr-components
 # deploy files
 deployapp.ps1
 
+#OSX specific
+.DS_Store
+
 # Node specific folders
 node_modules/
 

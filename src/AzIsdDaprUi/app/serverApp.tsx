@@ -1,18 +1,39 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { ChatApp } from "./chatApp";
-import { DaprClientSocketConnection, SignalRSocketFactory } from "./signalrSocketFactory";
+import { SignalRSocketFactory } from "./signalrSocketFactory";
+import { DaprChatClientSocketConnection } from "./DaprChatClientSocketConnection";
+import { Hello } from "./hello";
+import { DaprBankUIClientSocketConnection } from "./DaprBankUIClientSocketConnection";
+import { BankUiApp } from "./BankUiApp";
 
-let chatApp = document.getElementById("chat-app");
 const serverMessageChatHubUrl = '/hub/chat';
+const serverBankUiHubUrl = '/hub/bankui';
+const signalrConnectionStartTimeoutMs = 500;
+
+
 let socketFactory:SignalRSocketFactory = new SignalRSocketFactory();
-let serverSocketConnection:DaprClientSocketConnection = socketFactory.createClientSignalRConnection(serverMessageChatHubUrl);
+let chatApp = document.getElementById("chat-app");
+let serverClientSocketConnection:DaprChatClientSocketConnection = socketFactory.createChatClientSignalRConnection(serverMessageChatHubUrl);
 
 if(chatApp){
     const root = createRoot(chatApp);
-    root.render(<ChatApp clientSocketConnection={serverSocketConnection} allowChatSend={false}/>);
+    root.render(<ChatApp clientSocketConnection={serverClientSocketConnection} allowChatSend={false}/>);
 
     setTimeout(() => {
-        serverSocketConnection.startConnection();
-    }, 500);
+        serverClientSocketConnection.startConnection();
+    }, signalrConnectionStartTimeoutMs);
+}
+
+
+let bankUiApp = document.getElementById("bank-ui");
+let serverBankUiSocketConnection:DaprBankUIClientSocketConnection = socketFactory.createBankUiClientSignalRConnection(serverBankUiHubUrl);
+
+if(bankUiApp){
+    const root = createRoot(bankUiApp);
+    root.render(<BankUiApp clientSocketConnection={serverBankUiSocketConnection}/>);
+
+    setTimeout(() => {
+        serverBankUiSocketConnection.startConnection();
+    }, signalrConnectionStartTimeoutMs);
 }

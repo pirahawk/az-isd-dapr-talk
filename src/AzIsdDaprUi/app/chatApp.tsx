@@ -1,11 +1,11 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { useEffect, useRef, useState } from "react";
-import { DaprClientSocketConnection } from "./signalrSocketFactory";
+import { DaprChatClientSocketConnection } from "./DaprChatClientSocketConnection";
 import { HubConnectionState } from "@microsoft/signalr";
 
 export interface ChatAppInput {
-    clientSocketConnection: DaprClientSocketConnection
+    clientSocketConnection: DaprChatClientSocketConnection
     allowChatSend: boolean
 }
 
@@ -66,3 +66,4 @@ export function ChatApp({ clientSocketConnection, allowChatSend }: ChatAppInput)
 
     );
 }
+
