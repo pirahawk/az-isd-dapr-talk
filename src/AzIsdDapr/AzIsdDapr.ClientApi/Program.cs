@@ -25,37 +25,37 @@ builder.Services.AddTransient<IActorProxyFactory>(serviceProvider =>
     // of the target Dapr Sidecar that hosts the app that contains the Actors defined within.
     // You must always point to the Dapr sidecar in the url, not the Apps hosted url:port.
 
-    //var daprApiSidecarPort = configurationRoot?.GetValue<int?>("Dapr:ApiSidecarPort");
-    //var daprApiSidecarHostName = configurationRoot?.GetValue<string?>("Dapr:ApiSidecarHostName");
-    //var daprApiSidecarScheme = configurationRoot?.GetValue<string?>("Dapr:ApiSidecarScheme");
+    var daprApiSidecarPort = configurationRoot?.GetValue<int?>("Dapr:ApiSidecarPort");
+    var daprApiSidecarHostName = configurationRoot?.GetValue<string?>("Dapr:ApiSidecarHostName");
+    var daprApiSidecarScheme = configurationRoot?.GetValue<string?>("Dapr:ApiSidecarScheme");
 
-    //var daprActorUrl = $"{daprApiSidecarScheme}://{daprApiSidecarHostName}:{daprApiSidecarPort}";
+    var daprActorUrl = $"{daprApiSidecarScheme}://{daprApiSidecarHostName}:{daprApiSidecarPort}";
 
 
-    //if (daprApiSidecarPort == null)
-    //{
-    //    var message = $"IActorProxyFactoryInvocation: Unable to bind to configuration setting: Dapr:ApiSidecarPort";
-    //    logger?.LogError(message);
-    //    throw new ArgumentException(message);
-    //}
+    if (daprApiSidecarPort == null)
+    {
+       var message = $"IActorProxyFactoryInvocation: Unable to bind to configuration setting: Dapr:ApiSidecarPort";
+       logger?.LogError(message);
+       throw new ArgumentException(message);
+    }
 
-    //if (string.IsNullOrWhiteSpace(daprApiSidecarHostName))
-    //{
-    //    var message = $"IActorProxyFactoryInvocation: Unable to bind to configuration setting: Dapr:ApiSidecarHostName";
-    //    logger?.LogError(message);
-    //    throw new ArgumentException(message);
-    //}
+    if (string.IsNullOrWhiteSpace(daprApiSidecarHostName))
+    {
+       var message = $"IActorProxyFactoryInvocation: Unable to bind to configuration setting: Dapr:ApiSidecarHostName";
+       logger?.LogError(message);
+       throw new ArgumentException(message);
+    }
 
-    //if (string.IsNullOrWhiteSpace(daprApiSidecarScheme))
-    //{
-    //    var message = $"IActorProxyFactoryInvocation: Unable to bind to configuration setting: Dapr:ApiSidecarScheme";
-    //    logger?.LogError(message);
-    //    throw new ArgumentException(message);
-    //}
+    if (string.IsNullOrWhiteSpace(daprApiSidecarScheme))
+    {
+       var message = $"IActorProxyFactoryInvocation: Unable to bind to configuration setting: Dapr:ApiSidecarScheme";
+       logger?.LogError(message);
+       throw new ArgumentException(message);
+    }
 
-    //logger?.LogInformation($"IActorProxyFactoryInvocation: Actor proxy URL created for {daprActorUrl}");
+    logger?.LogInformation($"IActorProxyFactoryInvocation: Actor proxy URL created for {daprActorUrl}");
 
-    var daprActorUrl = $"{"http"}://{"localhost"}:{65295}";
+    //var daprActorUrl = $"{"http"}://{"localhost"}:{65295}";
 
     var proxyOptions = new ActorProxyOptions
     {
