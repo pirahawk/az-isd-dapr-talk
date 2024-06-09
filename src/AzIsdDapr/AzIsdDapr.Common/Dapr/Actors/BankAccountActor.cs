@@ -120,6 +120,7 @@ namespace AzIsdDapr.Common.Dapr.Actors
             this.logger.LogInformation($"{this.LogPrefix}- Activating Actor.");
             var defaultBalanceState = new AccountState
             {
+                CustomerName = "Colin Pilot",
                 Balance = 1000m,
             };
             this.accountState = await this.StateManager.GetOrAddStateAsync(ACCOUNT_STATE, defaultBalanceState);

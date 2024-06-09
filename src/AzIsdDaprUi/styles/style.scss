@@ -1,8 +1,64 @@
-body {
-    font: 14px "Century Gothic", Futura, sans-serif;
-    margin: 20px;
-  }
+// body {
+//     font: 14px "Century Gothic", Futura, sans-serif;
+//     margin: 20px;
+//   }
   
-  ol, ul {
-    padding-left: 30px;
+//   ol, ul {
+//     padding-left: 30px;
+//   }
+
+$mainFont: 14px Tahoma, sans-serif;
+$colorGreen: #04AA6D;
+$colorCrimson: #DC143C;
+
+body{
+  font: $mainFont
+}
+
+#chat-app, #bank-ui{
+  margin-left: 5px;
+}
+
+header{
+  text-align: center;
+}
+
+.connection-status span {
+  margin-left: 5px;
+  color: $colorCrimson;
+  &.connected{
+    color: $colorGreen;
   }
+}
+
+.message-input{
+  margin-top: 50px;;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+
+  fieldset{
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 220px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+
+    &:nth-of-type(2n){
+      margin-top: 5px;
+    }
+    input{
+      margin-left: 5px;
+    }
+  }
+
+  button{
+    margin-top: 20px;
+    width: 110px;
+  }
+}

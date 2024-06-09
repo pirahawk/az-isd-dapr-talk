@@ -47,6 +47,7 @@ export function BankUiApp({ clientSocketConnection }: BankUiAppInput) {
                 
                 {bankAccount? (
                     <div>
+                        <p><label htmlFor="">Account Name</label><span>{bankAccount.customerName}</span></p>
                         <p><label htmlFor="">Balance</label><span>{bankAccount.balance}</span></p>
                         <p>Transactions:</p>
                         <ul>
