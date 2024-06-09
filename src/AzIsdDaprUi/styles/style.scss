@@ -116,12 +116,17 @@ header{
   }
 
   .account-transactions{
-    .account-transaction-list{
-      div{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-      }
+    .transaction-createdUtc, .transaction-processedUtc{
+      padding-left: 30x;
+    }
+    .Processing{
+      color: $colorBlue;
+    }
+    .Cleared{
+      color: $colorGreen;
+    }
+    .Failed{
+      color: $colorCrimson;
     }
   }
 }

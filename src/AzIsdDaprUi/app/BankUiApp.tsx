@@ -25,57 +25,66 @@ export function BankUiApp({ clientSocketConnection }: BankUiAppInput) {
         })
     });
 
-    const transactionList = bankAccount && bankAccount.transactions?
-    
-    bankAccount.transactions.map((transaction, index, arr) => {
-        let transactionState:string = 'Processing';
+    const transactionList = bankAccount && bankAccount.transactions ?
 
-        switch(transaction.transactionState){
-            case 1:
-                transactionState= 'Processing';
-                break;
-            case 2:
-                transactionState= 'Cleared';
-                break;
-            case 3:
-                transactionState= 'Failed';
-                break;
-        }
+        bankAccount.transactions.map((transaction, index, arr) => {
+            let transactionState: string = 'Processing';
 
-        let transactionClass:string = `transaction-transactionState ${transactionState}`;
-        return (<div key={transaction.id}>
-            <span className="transaction-amount">{transaction.amount}</span>
-            <span className={transactionClass}>{transactionState}</span>
-            <span className="transaction-createdUtc">{transaction.createdUtc}</span>
-            <span className="transaction-processedUtc">{transaction.processedUtc}</span>
-            </div>);
-    })
-    : null;
+            switch (transaction.transactionState) {
+                case 1:
+                    transactionState = 'Processing';
+                    break;
+                case 2:
+                    transactionState = 'Cleared';
+                    break;
+                case 3:
+                    transactionState = 'Failed';
+                    break;
+            }
+
+            let transactionClass: string = `transaction-transactionState ${transactionState}`;
+            return (<tr key={transaction.id}>
+                <td className="transaction-amount">{transaction.amount}</td>
+                <td className={transactionClass}>{transactionState}</td>
+                <td className="transaction-createdUtc">{transaction.createdUtc}</td>
+                <td className="transaction-processedUtc">{transaction.processedUtc}</td>
+            </tr>);
+        })
+        : null;
 
     return (
         <div>
             <div className="connection-status">
-                <p>Connection Status:<span className={HubConnectionState[connectionStatus] == HubConnectionState.Connected? 'connected' : 'notconnected'}>{HubConnectionState[connectionStatus]}</span></p>
+                <p>Connection Status:<span className={HubConnectionState[connectionStatus] == HubConnectionState.Connected ? 'connected' : 'notconnected'}>{HubConnectionState[connectionStatus]}</span></p>
             </div>
 
             <div className="bank-account">
-                
-                {bankAccount? (
+
+                {bankAccount ? (
                     <div>
                         <div className="account-summary">
                             <p><label >Account Name</label><span>{bankAccount.customerName}</span></p>
                             <p><label>Balance</label><span className="account-blance">{bankAccount.balance}</span></p>
                         </div>
-                        
+
                         <div className="account-transactions">
                             <p>Transactions:</p>
-                            <div className="account-transaction-list">
-                                <div><span>Amount</span><span>State</span><span>Created</span><span>Processed</span></div>
-                                {transactionList}
-                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">State</th>
+                                        <th scope="col">Created</th>
+                                        <th scope="col">Processed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {transactionList}
+                                </tbody>
+                            </table>
                         </div>
-                     </div>
-                ): (
+                    </div>
+                ) : (
                     <p>Awaiting Account information</p>
                 )}
 
