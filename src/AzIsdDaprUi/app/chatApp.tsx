@@ -36,30 +36,25 @@ export function ChatApp({ clientSocketConnection, allowChatSend }: ChatAppInput)
     }
 
     const messageList = messages.map((message, index, arr) => {
-        return (<li key={index}>{message}</li>);
+        return (<div className="message" key={index}>{message}</div>);
     });
 
     return (
         <div>
             <div className="connection-status">
-                <p>Connection Status:<span>{HubConnectionState[connectionStatus]}</span></p>
+                <p>Connection Status:<span className={HubConnectionState[connectionStatus] == HubConnectionState.Connected? 'connected' : 'notconnected'}>{HubConnectionState[connectionStatus]}</span></p>
             </div>
 
             {allowChatSend ? (
-                <div className="message-send">
-
-                    <label>UserName:<input type="text" ref={userNameRef}></input></label>
-                    <br></br>
-                    <label>Message:<input type="text" ref={messageInputRef}></input></label>
-                    <br></br>
+                <div className="message-input">
+                    <fieldset><label htmlFor="userNameInput">UserName:</label><input id="userNameInput" type="text" ref={userNameRef}></input></fieldset>
+                    <fieldset><label htmlFor="messageInput">Message:</label><input id="messageInput" type="text" ref={messageInputRef}></input></fieldset>
                     <button onClick={handleMessageSend}>Send Message</button>
                 </div>
             ) : (null)}
 
-            <div className="message-list">
-                <ul>
-                    {messageList}
-                </ul>
+            <div className="recieved-messages">
+                {messageList}
             </div>
         </div>
 

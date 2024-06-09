@@ -67,6 +67,7 @@ export class DaprBankUIClientSocketConnection {
 
 export interface BankAccountState{
     balance: number
+    customerName:string
     transactions: BankAccountTransaction[]
 }
 
@@ -75,5 +76,5 @@ export interface BankAccountTransaction{
     amount:number
     createdUtc: string
     processedUtc?: string
-    transactionState: string
+    transactionState: number
 }

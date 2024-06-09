@@ -32,17 +32,16 @@ export function BankClientApp() {
     }
 
     return (
-        <div>
-            <p>Bank Client App</p>
-            <div>
-                <p>Create Bank Account</p>
+        <div className="bankController">
+            <fieldset>
+                <legend>Create Bank Account</legend>
                 <button onClick={handleMessageSend}>Activate Account</button>
-            </div>
-            <div>
-                <p>Post Bank Transaction</p>
-                <label>Amount:<input type="number" ref={transactionAmountRef}></input></label>
+            </fieldset>
+            <fieldset>
+                <legend>Post Bank Transaction</legend>
+                <label htmlFor="transactionAmount">Amount:<input id="transactionAmount" type="number" placeholder="£" ref={transactionAmountRef}></input></label>
                 <button onClick={handlePostTransaction}>Post Transaction</button>
-            </div>
+            </fieldset>
         </div>
 
     );

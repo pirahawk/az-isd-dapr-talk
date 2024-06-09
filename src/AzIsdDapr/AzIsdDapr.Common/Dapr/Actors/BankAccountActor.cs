@@ -43,7 +43,7 @@ namespace AzIsdDapr.Common.Dapr.Actors
             {
                 Id = $"{Guid.NewGuid()}",
                 Amount = depositAmount,
-                CreatedUtc = DateTimeOffset.UtcNow,
+                CreatedUtc = DateTimeOffset.UtcNow.ToString("g"),
                 TransactionState = TransactionState.Processing,
             };
 
@@ -77,7 +77,7 @@ namespace AzIsdDapr.Common.Dapr.Actors
                 nameof(this.TransactionTimerCallBack),
                 null,
                 TimeSpan.FromSeconds(3),
-                TimeSpan.FromSeconds(3));
+                TimeSpan.FromSeconds(5));
         }
 
         private async Task TransactionTimerCallBack(byte[] data)
@@ -104,10 +104,14 @@ namespace AzIsdDapr.Common.Dapr.Actors
             Assumes.NotNull(transaction);
 
             this.logger.LogInformation($"{this.LogPrefix}- Start processing Transaction {transaction.Id} for amount {transaction.Amount}.");
-            accountState.Balance += transaction.Amount;
-            transaction.ProcessedUtc = DateTimeOffset.UtcNow;
-            transaction.TransactionState = TransactionState.Cleared;
 
+            if(accountState.Balance + transaction.Amount < 0){
+                transaction.TransactionState = TransactionState.Failed;
+            }else{
+                accountState.Balance += transaction.Amount;
+                transaction.TransactionState = TransactionState.Cleared;
+            }
+            transaction.ProcessedUtc = DateTimeOffset.UtcNow.ToString("g");
             await this.SaveAccountState();
             this.logger.LogInformation($"{this.LogPrefix}- Transaction {transaction.Id} for amount {transaction.Amount} processed successfully.\nAccount balance is now {accountState.Balance}.");
         }
@@ -120,6 +124,7 @@ namespace AzIsdDapr.Common.Dapr.Actors
             this.logger.LogInformation($"{this.LogPrefix}- Activating Actor.");
             var defaultBalanceState = new AccountState
             {
+                CustomerName = "Colin Pilot",
                 Balance = 1000m,
             };
             this.accountState = await this.StateManager.GetOrAddStateAsync(ACCOUNT_STATE, defaultBalanceState);

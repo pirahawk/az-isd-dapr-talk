@@ -25,35 +25,66 @@ export function BankUiApp({ clientSocketConnection }: BankUiAppInput) {
         })
     });
 
-    const transactionList = bankAccount && bankAccount.transactions?
-    
-    bankAccount.transactions.map((transaction, index, arr) => {
-        return (<li key={transaction.id}>
-            <span>{transaction.amount}</span>|
-            <span>{transaction.transactionState}</span>|
-            <span>{transaction.createdUtc}</span>|
-            <span>{transaction.processedUtc}</span>|
-            </li>);
-    })
-    : null;
+    const transactionList = bankAccount && bankAccount.transactions ?
+
+        bankAccount.transactions.map((transaction, index, arr) => {
+            let transactionState: string = 'Processing';
+
+            switch (transaction.transactionState) {
+                case 1:
+                    transactionState = 'Processing';
+                    break;
+                case 2:
+                    transactionState = 'Cleared';
+                    break;
+                case 3:
+                    transactionState = 'Failed';
+                    break;
+            }
+
+            let transactionClass: string = `transaction-transactionState ${transactionState}`;
+            return (<tr key={transaction.id}>
+                <td className="transaction-amount">{transaction.amount}</td>
+                <td className={transactionClass}>{transactionState}</td>
+                <td className="transaction-createdUtc">{transaction.createdUtc}</td>
+                <td className="transaction-processedUtc">{transaction.processedUtc}</td>
+            </tr>);
+        })
+        : null;
 
     return (
         <div>
             <div className="connection-status">
-                <p>Connection Status:<span>{HubConnectionState[connectionStatus]}</span></p>
+                <p>Connection Status:<span className={HubConnectionState[connectionStatus] == HubConnectionState.Connected ? 'connected' : 'notconnected'}>{HubConnectionState[connectionStatus]}</span></p>
             </div>
 
-            <div className="message-list">
-                
-                {bankAccount? (
+            <div className="bank-account">
+
+                {bankAccount ? (
                     <div>
-                        <p><label htmlFor="">Balance</label><span>{bankAccount.balance}</span></p>
-                        <p>Transactions:</p>
-                        <ul>
-                            {transactionList}
-                        </ul>
-                     </div>
-                ): (
+                        <div className="account-summary">
+                            <p><label >Account Name</label><span>{bankAccount.customerName}</span></p>
+                            <p><label>Balance</label><span className="account-blance">{bankAccount.balance}</span></p>
+                        </div>
+
+                        <div className="account-transactions">
+                            <p>Transactions:</p>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">State</th>
+                                        <th scope="col">Created</th>
+                                        <th scope="col">Processed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {transactionList}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                ) : (
                     <p>Awaiting Account information</p>
                 )}
 
