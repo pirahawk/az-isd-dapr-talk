@@ -28,31 +28,52 @@ export function BankUiApp({ clientSocketConnection }: BankUiAppInput) {
     const transactionList = bankAccount && bankAccount.transactions?
     
     bankAccount.transactions.map((transaction, index, arr) => {
-        return (<li key={transaction.id}>
-            <span>{transaction.amount}</span>|
-            <span>{transaction.transactionState}</span>|
-            <span>{transaction.createdUtc}</span>|
-            <span>{transaction.processedUtc}</span>|
-            </li>);
+        let transactionState:string = 'Processing';
+
+        switch(transaction.transactionState){
+            case 1:
+                transactionState= 'Processing';
+                break;
+            case 2:
+                transactionState= 'Cleared';
+                break;
+            case 3:
+                transactionState= 'Failed';
+                break;
+        }
+
+        let transactionClass:string = `transaction-transactionState ${transactionState}`;
+        return (<div key={transaction.id}>
+            <span className="transaction-amount">{transaction.amount}</span>
+            <span className={transactionClass}>{transactionState}</span>
+            <span className="transaction-createdUtc">{transaction.createdUtc}</span>
+            <span className="transaction-processedUtc">{transaction.processedUtc}</span>
+            </div>);
     })
     : null;
 
     return (
         <div>
             <div className="connection-status">
-                <p>Connection Status:<span>{HubConnectionState[connectionStatus]}</span></p>
+                <p>Connection Status:<span className={HubConnectionState[connectionStatus] == HubConnectionState.Connected? 'connected' : 'notconnected'}>{HubConnectionState[connectionStatus]}</span></p>
             </div>
 
-            <div className="message-list">
+            <div className="bank-account">
                 
                 {bankAccount? (
                     <div>
-                        <p><label htmlFor="">Account Name</label><span>{bankAccount.customerName}</span></p>
-                        <p><label htmlFor="">Balance</label><span>{bankAccount.balance}</span></p>
-                        <p>Transactions:</p>
-                        <ul>
-                            {transactionList}
-                        </ul>
+                        <div className="account-summary">
+                            <p><label >Account Name</label><span>{bankAccount.customerName}</span></p>
+                            <p><label>Balance</label><span className="account-blance">{bankAccount.balance}</span></p>
+                        </div>
+                        
+                        <div className="account-transactions">
+                            <p>Transactions:</p>
+                            <div className="account-transaction-list">
+                                <div><span>Amount</span><span>State</span><span>Created</span><span>Processed</span></div>
+                                {transactionList}
+                            </div>
+                        </div>
                      </div>
                 ): (
                     <p>Awaiting Account information</p>

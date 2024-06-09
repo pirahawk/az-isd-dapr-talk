@@ -10,9 +10,22 @@
 $mainFont: 14px Tahoma, sans-serif;
 $colorGreen: #04AA6D;
 $colorCrimson: #DC143C;
+$colorBlue: #1086E4;
+$colorBlack: #000000;
 
 body{
   font: $mainFont
+}
+
+menu{
+  padding: 0;
+  margin-left: 5px;
+  a{
+    &, &:link, &:visited{
+      color: $colorBlack;
+    }
+    
+  }
 }
 
 #chat-app, #bank-ui{
@@ -60,5 +73,55 @@ header{
   button{
     margin-top: 20px;
     width: 110px;
+  }
+}
+
+.recieved-messages{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+
+  .message{
+    margin-top: 5px;
+    font-size: 16px;
+  }
+}
+
+
+.bankController fieldset{
+  border: none;
+  margin-top: 10px;
+
+  &:nth-of-type(2){
+    button{
+      margin-left: 10px;
+    }
+  }
+}
+
+.bank-account {
+  margin-top: 40px;
+
+  .account-summary{
+    label::after{
+      content: ':';
+    }
+    span{
+      margin-left: 5px;
+
+      &.account-blance::before{
+        content: '£';
+      }
+    }
+  }
+
+  .account-transactions{
+    .account-transaction-list{
+      div{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
   }
 }

@@ -36,7 +36,7 @@ export function ChatApp({ clientSocketConnection, allowChatSend }: ChatAppInput)
     }
 
     const messageList = messages.map((message, index, arr) => {
-        return (<li key={index}>{message}</li>);
+        return (<div className="message" key={index}>{message}</div>);
     });
 
     return (
@@ -53,10 +53,8 @@ export function ChatApp({ clientSocketConnection, allowChatSend }: ChatAppInput)
                 </div>
             ) : (null)}
 
-            <div className="message-list">
-                <ul>
-                    {messageList}
-                </ul>
+            <div className="recieved-messages">
+                {messageList}
             </div>
         </div>
 

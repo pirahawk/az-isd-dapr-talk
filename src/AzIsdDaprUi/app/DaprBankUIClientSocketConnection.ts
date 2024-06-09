@@ -76,5 +76,5 @@ export interface BankAccountTransaction{
     amount:number
     createdUtc: string
     processedUtc?: string
-    transactionState: string
+    transactionState: number
 }
