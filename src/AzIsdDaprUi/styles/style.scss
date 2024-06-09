@@ -116,8 +116,8 @@ header{
   }
 
   .account-transactions{
-    .transaction-createdUtc, .transaction-processedUtc{
-      padding-left: 30x;
+    td{
+      padding: 10px;
     }
     .Processing{
       color: $colorBlue;
